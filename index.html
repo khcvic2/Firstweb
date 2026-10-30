@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 소개 | 수질 분석 20년, 이제 창업으로</title>
+
+  <!-- 글꼴: 구글 폰트의 Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== 색상 모음 (여기 값만 바꾸면 전체 색이 바뀝니다) ===== */
+    :root {
+      --bg: #f6fafb;
+      --card: #ffffff;
+      --text: #14232b;
+      --muted: #5b6f79;
+      --line: #dbe7ec;
+      --main: #0e7c86;      /* 대표색: 물을 떠올리는 청록색 */
+      --main-soft: #e1f3f4;
+      --accent: #f2a541;    /* 강조색: 따뜻한 주황 */
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1a20;
+        --card: #13252d;
+        --text: #e6f0f3;
+        --muted: #9db2bb;
+        --line: #22404b;
+        --main: #3cc4cf;
+        --main-soft: #173842;
+        --accent: #f5b65f;
+      }
+    }
+
+    /* ===== 기본 설정 ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+
+    /* ===== 맨 위 큰 소개 영역 ===== */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 110px 0 90px;
+      background: linear-gradient(135deg, #0a5c66 0%, #0e7c86 50%, #2aa6b0 100%);
+      color: #fff;
+    }
+    /* 배경의 물방울 장식 */
+    .hero::before, .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .hero::before { width: 420px; height: 420px; right: -120px; top: -140px; }
+    .hero::after  { width: 260px; height: 260px; right: 160px; bottom: -150px; }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 22px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 18px;
+    }
+    .hero h1 .hl { color: #ffd38a; }
+    .hero p {
+      font-size: clamp(16px, 2.4vw, 19px);
+      opacity: 0.92;
+      max-width: 560px;
+    }
+
+    /* ===== 숫자 카드 3개 ===== */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: -46px;
+      position: relative;
+      z-index: 1;
+    }
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px 18px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(10, 60, 70, 0.08);
+    }
+    .stat strong {
+      display: block;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--main);
+    }
+    .stat span { font-size: 14px; color: var(--muted); }
+
+    /* ===== 공통 섹션 ===== */
+    section.block { padding: 70px 0 10px; }
+    .label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--main);
+      margin-bottom: 8px;
+    }
+    h2 { font-size: clamp(24px, 4vw, 30px); font-weight: 900; margin-bottom: 18px; }
+    .lead { color: var(--muted); font-size: 17px; }
+
+    /* ===== 소개 카드 ===== */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 26px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 26px;
+    }
+    .card .icon {
+      width: 46px; height: 46px;
+      display: grid; place-items: center;
+      border-radius: 12px;
+      background: var(--main-soft);
+      font-size: 22px;
+      margin-bottom: 14px;
+    }
+    .card h3 { font-size: 18px; margin-bottom: 6px; }
+    .card p  { color: var(--muted); font-size: 15px; }
+
+    /* ===== 여정(타임라인) ===== */
+    .timeline { list-style: none; margin-top: 28px; position: relative; }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 11px; top: 6px; bottom: 6px;
+      width: 2px;
+      background: var(--line);
+    }
+    .timeline li { position: relative; padding: 0 0 30px 44px; }
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: 4px; top: 6px;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 3px solid var(--main);
+    }
+    .timeline li.now::before  { background: var(--main); }
+    .timeline li.goal::before { border-color: var(--accent); background: var(--accent); }
+    .timeline .when { font-size: 13px; font-weight: 700; color: var(--main); }
+    .timeline li.goal .when { color: var(--accent); }
+    .timeline h3 { font-size: 18px; margin: 2px 0 4px; }
+    .timeline p  { color: var(--muted); font-size: 15px; }
+
+    /* ===== 목표 강조 박스 ===== */
+    .goal-box {
+      margin: 50px 0 70px;
+      padding: 40px 32px;
+      border-radius: 20px;
+      background: var(--main-soft);
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+    .goal-box h2 { margin-bottom: 10px; }
+    .goal-box .lead { max-width: 560px; margin: 0 auto; }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* ===== 휴대폰처럼 좁은 화면일 때 ===== */
+    @media (max-width: 640px) {
+      .hero { padding: 80px 0 80px; }
+      .stats { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: 1fr; }
+      .goal-box { padding: 30px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. 맨 위 소개 -->
+  <header class="hero">
+    <div class="wrap">
+      <span class="badge">💧 수질 분석 장비 영업 20년차</span>
+      <h1>현장의 20년 경험을<br><span class="hl">코드</span>로 옮기는 중입니다</h1>
+      <p>수질 분석 장비 영업을 20년 동안 해 왔고, 지금은 창업을 위해 바이브 코딩을 배우고 있습니다.</p>
+    </div>
+  </header>
+
+  <!-- 2. 숫자 카드 -->
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><strong>20년</strong><span>수질 분석 장비 영업</span></div>
+      <div class="stat"><strong>바이브 코딩</strong><span>지금 배우는 중</span></div>
+      <div class="stat"><strong>MVP</strong><span>이번 수업의 목표</span></div>
+    </div>
+  </div>
+
+  <main class="wrap">
+
+    <!-- 3. 나는 누구인가 -->
+    <section class="block">
+      <div class="label">ABOUT ME</div>
+      <h2>저는 이런 사람입니다</h2>
+      <p class="lead">오랫동안 수질 분석 장비를 고객에게 소개하고 판매해 왔습니다. 이제 그 경험을 바탕으로 직접 서비스를 만들어 창업하려고 합니다.</p>
+
+      <div class="cards">
+        <div class="card">
+          <div class="icon">🔬</div>
+          <h3>수질 분석 장비 영업</h3>
+          <p>20년 동안 수질 분석 장비 영업을 담당해 왔습니다.</p>
+        </div>
+        <div class="card">
+          <div class="icon">💻</div>
+          <h3>바이브 코딩 학습</h3>
+          <p>코딩을 처음부터 배우고 있습니다. AI와 대화하며 직접 만들어 보는 중입니다.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🧪</div>
+          <h3>화학물질관리 플랫폼</h3>
+          <p>앞으로 만들 서비스입니다. 화학물질을 관리하는 플랫폼을 준비하고 있습니다.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🚀</div>
+          <h3>창업 준비</h3>
+          <p>바이브 코딩을 배우는 이유는 창업입니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 나의 여정 -->
+    <section class="block">
+      <div class="label">MY JOURNEY</div>
+      <h2>지금까지, 그리고 앞으로</h2>
+      <ul class="timeline">
+        <li>
+          <div class="when">지난 20년</div>
+          <h3>수질 분석 장비 영업</h3>
+          <p>현장에서 고객을 만나며 수질 분석 장비를 소개하고 판매했습니다.</p>
+        </li>
+        <li class="now">
+          <div class="when">지금</div>
+          <h3>바이브 코딩 배우기</h3>
+          <p>첫 번째 프로젝트로 이 소개 페이지를 만들었습니다.</p>
+        </li>
+        <li class="goal">
+          <div class="when">목표</div>
+          <h3>화학물질관리 플랫폼 MVP 완성</h3>
+          <p>이 수업을 마치고 MVP를 만드는 것이 목표입니다.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 5. 목표 강조 -->
+    <div class="goal-box">
+      <div class="label">MY GOAL</div>
+      <h2>화학물질관리 플랫폼 MVP</h2>
+      <p class="lead">MVP는 꼭 필요한 기능만 담아 처음 만드는 최소 버전의 제품입니다. 이 수업을 통해 첫 버전을 완성하겠습니다.</p>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="wrap">바이브 코딩으로 만든 첫 번째 웹페이지</div>
+  </footer>
+
+</body>
+</html>
