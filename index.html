@@ -8,8 +8,11 @@
   <!-- 글꼴: 구글 폰트의 Noto Sans KR -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 
+  <!-- 부트스트랩 무료 아이콘 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/autocomplete-theme.css">
   <style>
     /* ===== 색상 모음 (여기 값만 바꾸면 전체 색이 바뀝니다) ===== */
     :root {
@@ -38,10 +41,14 @@
     /* ===== 기본 설정 ===== */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Noto Sans KR', sans-serif;
+      font-family: 'Inter', 'Noto Sans KR', sans-serif; /* 영문·숫자는 Inter, 한글은 Noto Sans KR */
       background: var(--bg);
       color: var(--text);
       line-height: 1.7;
+      word-break: keep-all;          /* 한글 단어가 중간에서 잘리지 않게 */
+      overflow-wrap: break-word;     /* 아주 긴 단어는 화면 밖으로 넘치지 않게 */
+      -webkit-text-size-adjust: 100%; /* 아이폰 가로 화면에서 글자가 멋대로 커지지 않게 */
+      text-size-adjust: 100%;
     }
     .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
 
@@ -104,7 +111,7 @@
     }
     .stat strong {
       display: block;
-      font-size: 28px;
+      font-size: clamp(22px, 3.4vw, 28px);
       font-weight: 900;
       color: var(--main);
     }
@@ -126,24 +133,70 @@
     .cards {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: 1fr;    /* 모든 줄의 높이를 같게 → 카드 크기 동일 */
       gap: 16px;
       margin-top: 26px;
     }
     .card {
+      /* 카드마다 색이 다르게: --c(진한 색), --c-soft(연한 바탕색) */
+      --c: var(--main);
+      --c-soft: var(--main-soft);
+      position: relative;
+      overflow: hidden;
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 16px;
-      padding: 26px;
+      padding: 24px;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      /* 아이콘은 제목 왼쪽에 작게, 설명은 그 아래에 */
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto 1fr;
+      column-gap: 10px;
+      row-gap: 8px;
+      align-items: center;
+    }
+    .card p { grid-column: 1 / -1; align-self: start; }
+    /* 카드 맨 위의 색 띠 */
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--c);
+    }
+    /* 마우스를 올리면 살짝 떠오르며 테두리에 색이 들어감 */
+    .card:hover {
+      border-color: var(--c);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px -12px var(--c);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .card { transition: none; }
+      .card:hover { transform: none; }
     }
     .card .icon {
-      width: 46px; height: 46px;
+      width: 30px; height: 30px;
       display: grid; place-items: center;
-      border-radius: 12px;
-      background: var(--main-soft);
-      font-size: 22px;
-      margin-bottom: 14px;
+      border-radius: 8px;
+      background: var(--c-soft);
+      border: 1px solid var(--c);
+      color: var(--c);        /* 아이콘 색 = 카드 색 */
+      font-size: 15px;
     }
-    .card h3 { font-size: 18px; margin-bottom: 6px; }
+    .card h3 { font-size: 18px; line-height: 1.35; color: var(--c); }
+
+    /* ===== 카드별 색상 ===== */
+    .card.c-teal   { --c: #0e7c86; --c-soft: #e1f3f4; } /* 청록: 수질·물 */
+    .card.c-violet { --c: #3e34d3; --c-soft: #ebe9fb; } /* 보라: 코딩 */
+    .card.c-amber  { --c: #a15f00; --c-soft: #fdf1dc; } /* 호박색: 시약·화학 */
+    .card.c-coral  { --c: #d0473f; --c-soft: #fde8e7; } /* 산호색: 창업·도전 */
+    @media (prefers-color-scheme: dark) {
+      .card.c-teal   { --c: #3cc4cf; --c-soft: #173842; }
+      .card.c-violet { --c: #9d96ff; --c-soft: #25234a; }
+      .card.c-amber  { --c: #f5b65f; --c-soft: #3a2c14; }
+      .card.c-coral  { --c: #ff8a80; --c-soft: #3d2020; }
+    }
     .card p  { color: var(--muted); font-size: 15px; }
 
     /* ===== 여정(타임라인) ===== */
@@ -194,10 +247,137 @@
 
     /* ===== 휴대폰처럼 좁은 화면일 때 ===== */
     @media (max-width: 640px) {
-      .hero { padding: 80px 0 80px; }
-      .stats { grid-template-columns: 1fr; }
-      .cards { grid-template-columns: 1fr; }
-      .goal-box { padding: 30px 20px; }
+      .hero { padding: 64px 0 76px; }
+      .hero::before { width: 300px; height: 300px; right: -140px; top: -120px; }
+      .hero::after  { width: 200px; height: 200px; right: 40px; bottom: -130px; }
+      .badge { font-size: 13px; margin-bottom: 18px; }
+
+      /* 숫자 카드: 세로로 길게 쌓이지 않도록 한 줄짜리 납작한 카드로 */
+      .stats { grid-template-columns: 1fr; gap: 10px; margin-top: -40px; }
+      .stat {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 20px;
+        text-align: left;
+      }
+      .stat strong { font-size: 22px; }
+      .stat span { text-align: right; }
+
+      section.block { padding: 52px 0 6px; }
+      .lead { font-size: 16px; }
+      .cards { grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
+      .card { padding: 22px 20px; }
+      .timeline li { padding-bottom: 24px; }
+      .goal-box { margin: 36px 0 52px; padding: 30px 20px; }
+    }
+
+    /* ===== 아주 작은 휴대폰 (가로 360px 이하) ===== */
+    @media (max-width: 360px) {
+      .wrap { padding: 0 16px; }
+      .hero h1 { font-size: 28px; }
+    }
+
+    /* ===== 위에서 왔다갔다 하는 강아지 ===== */
+    .dog-track {
+      position: absolute;
+      top: 22px; left: 16px; right: 16px;
+      height: 44px;
+      pointer-events: none;   /* 강아지가 클릭을 막지 않게 */
+      z-index: 1;
+    }
+    .dog {
+      position: absolute;
+      left: 0; top: 0;
+      width: 60px; height: 44px;
+      animation: dog-move 16s linear infinite;
+    }
+    .dog svg { width: 100%; height: 100%; overflow: visible; animation: dog-bob .4s ease-in-out infinite; }
+    /* 오른쪽 끝까지 걸어가서 → 뒤돌아 → 왼쪽으로 돌아옴 */
+    @keyframes dog-move {
+      0%   { left: 0;                  transform: scaleX(1); }
+      48%  { left: calc(100% - 60px);  transform: scaleX(1); }
+      50%  { left: calc(100% - 60px);  transform: scaleX(-1); }
+      98%  { left: 0;                  transform: scaleX(-1); }
+      100% { left: 0;                  transform: scaleX(1); }
+    }
+    /* 걸을 때 몸이 살짝 통통 튐 */
+    @keyframes dog-bob { 50% { transform: translateY(-2px); } }
+    /* 다리: 두 쌍이 번갈아 앞뒤로 */
+    .dog .leg { transform-box: fill-box; transform-origin: top center; }
+    .dog .leg-a { animation: dog-leg .4s ease-in-out infinite alternate; }
+    .dog .leg-b { animation: dog-leg .4s ease-in-out infinite alternate-reverse; }
+    @keyframes dog-leg { from { transform: rotate(22deg); } to { transform: rotate(-22deg); } }
+    /* 꼬리 살랑살랑 */
+    .dog .tail { transform-box: fill-box; transform-origin: right bottom; animation: dog-tail .3s ease-in-out infinite alternate; }
+    @keyframes dog-tail { from { transform: rotate(-15deg); } to { transform: rotate(20deg); } }
+    /* "애니메이션 줄이기"를 켠 사람에게는 가만히 앉아 있게 */
+    @media (prefers-reduced-motion: reduce) {
+      .dog, .dog svg, .dog .leg, .dog .tail { animation: none; }
+    }
+    /* 휴대폰: 강아지가 뱃지와 겹치지 않게 위쪽 여백을 조금 늘림 */
+    @media (max-width: 640px) {
+      .hero { padding-top: 84px; }
+      .dog-track { top: 16px; }
+    }
+
+    /* ===== 흐르는 물 (소개 영역 아래쪽 물결) ===== */
+    .water {
+      position: absolute;
+      left: 0; right: 0; bottom: -1px;
+      height: 70px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    /* 물결 그림은 화면 폭의 2배 → 왼쪽으로 절반씩 밀면 끊김 없이 계속 흐름 */
+    .water svg {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 200%;
+      height: 100%;
+    }
+    .water .w1 { animation: water-flow 14s linear infinite; }
+    .water .w2 { animation: water-flow 9s linear infinite reverse; height: 85%; }
+    .water .w3 { animation: water-flow 6s linear infinite; height: 65%; }
+    .water .w1 path { fill: rgba(255, 255, 255, 0.12); }
+    .water .w2 path { fill: rgba(255, 255, 255, 0.18); }
+    .water .w3 path { fill: var(--bg); }   /* 맨 앞 물결 = 아래 본문 배경색 → 자연스럽게 이어짐 */
+    @keyframes water-flow {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    /* 보글보글 올라가는 물방울 */
+    .bubble {
+      position: absolute;
+      bottom: 20px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      /* 왼쪽 위에 반짝이는 빛 → 진짜 물방울처럼 */
+      background: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, 0.7) 0 14%, rgba(255, 255, 255, 0.12) 16%);
+      pointer-events: none;
+      opacity: 0;
+      animation: bubble-up 10s ease-in infinite;
+    }
+    .bubble.b1 { left: 8%;  width: 24px; height: 24px; animation-delay: 0s; }
+    .bubble.b2 { left: 22%; width: 14px; height: 14px; animation-delay: 2.5s; }
+    .bubble.b3 { left: 41%; width: 28px; height: 28px; animation-delay: 4s; }
+    .bubble.b4 { left: 63%; width: 16px; height: 16px; animation-delay: 1.2s; }
+    .bubble.b5 { left: 78%; width: 20px; height: 20px; animation-delay: 5.5s; }
+    .bubble.b6 { left: 92%; width: 12px; height: 12px; animation-delay: 3.2s; }
+    @keyframes bubble-up {
+      /* bottom 값을 키워서 소개 영역 맨 위(100%)까지 올라감, 좌우로 살랑살랑 흔들림 */
+      0%   { bottom: 20px;  transform: translateX(0);    opacity: 0; }
+      10%  { opacity: 1; }
+      25%  { transform: translateX(10px); }
+      50%  { transform: translateX(-8px); }
+      75%  { transform: translateX(10px); }
+      90%  { opacity: 1; }
+      100% { bottom: 100%;  transform: translateX(0);    opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .water svg, .bubble { animation: none; }
+      .bubble { display: none; }
     }
   </style>
 </head>
@@ -205,10 +385,52 @@
 
   <!-- 1. 맨 위 소개 -->
   <header class="hero">
+    <!-- 왔다갔다 하는 강아지 (장식용) -->
+    <div class="dog-track" aria-hidden="true">
+      <div class="dog">
+        <svg viewBox="0 0 64 48">
+          <!-- 꼬리 -->
+          <path class="tail" d="M13 24 Q5 20 6 11" fill="none" stroke="#e0b878" stroke-width="4" stroke-linecap="round"/>
+          <!-- 다리 (뒤쪽 쌍) -->
+          <rect class="leg leg-b" x="21" y="30" width="5" height="12" rx="2.5" fill="#d9ad69"/>
+          <rect class="leg leg-b" x="36" y="30" width="5" height="12" rx="2.5" fill="#d9ad69"/>
+          <!-- 몸통 -->
+          <ellipse cx="29" cy="27" rx="17" ry="9.5" fill="#f3d7a8"/>
+          <!-- 다리 (앞쪽 쌍) -->
+          <rect class="leg leg-a" x="16" y="31" width="5" height="12" rx="2.5" fill="#f3d7a8"/>
+          <rect class="leg leg-a" x="40" y="31" width="5" height="12" rx="2.5" fill="#f3d7a8"/>
+          <!-- 목걸이 -->
+          <rect x="40" y="22" width="4" height="9" rx="2" fill="#e5484d"/>
+          <!-- 머리 -->
+          <circle cx="47" cy="17" r="10" fill="#f3d7a8"/>
+          <!-- 귀 -->
+          <ellipse cx="42" cy="14" rx="3.8" ry="7" transform="rotate(-18 42 14)" fill="#b9874a"/>
+          <!-- 주둥이와 코 -->
+          <ellipse cx="55.5" cy="20.5" rx="5.5" ry="4" fill="#fbe9cc"/>
+          <circle cx="60" cy="19" r="1.9" fill="#2b2b2b"/>
+          <!-- 눈 -->
+          <circle cx="50" cy="14.5" r="1.5" fill="#2b2b2b"/>
+          <!-- 볼 -->
+          <circle cx="51" cy="20" r="1.6" fill="#f4a3a3" opacity=".8"/>
+        </svg>
+      </div>
+    </div>
     <div class="wrap">
       <span class="badge">💧 수질 분석 장비 영업 20년차</span>
       <h1>현장의 20년 경험을<br><span class="hl">코드</span>로 옮기는 중입니다</h1>
       <p>수질 분석 장비 영업을 20년 동안 해 왔고, 지금은 창업을 위해 바이브 코딩을 배우고 있습니다.</p>
+    </div>
+    <!-- 흐르는 물 (장식용) -->
+    <span class="bubble b1" aria-hidden="true"></span>
+    <span class="bubble b2" aria-hidden="true"></span>
+    <span class="bubble b3" aria-hidden="true"></span>
+    <span class="bubble b4" aria-hidden="true"></span>
+    <span class="bubble b5" aria-hidden="true"></span>
+    <span class="bubble b6" aria-hidden="true"></span>
+    <div class="water" aria-hidden="true">
+      <svg class="w1" viewBox="0 0 1200 70" preserveAspectRatio="none"><path d="M0 30 Q150 5 300 30 T600 30 T900 30 T1200 30 V70 H0 Z"/></svg>
+      <svg class="w2" viewBox="0 0 1200 70" preserveAspectRatio="none"><path d="M0 35 Q150 60 300 35 T600 35 T900 35 T1200 35 V70 H0 Z"/></svg>
+      <svg class="w3" viewBox="0 0 1200 70" preserveAspectRatio="none"><path d="M0 35 Q150 10 300 35 T600 35 T900 35 T1200 35 V70 H0 Z"/></svg>
     </div>
   </header>
 
@@ -227,26 +449,27 @@
     <section class="block">
       <div class="label">ABOUT ME</div>
       <h2>저는 이런 사람입니다</h2>
+      <img src="images/image.png" alt="프로필 이미지" style="display:block; max-width:100%; width:360px; height:auto; border-radius:12px; margin:16px 0;">
       <p class="lead">오랫동안 수질 분석 장비를 고객에게 소개하고 판매해 왔습니다. 이제 그 경험을 바탕으로 직접 서비스를 만들어 창업하려고 합니다.</p>
 
       <div class="cards">
-        <div class="card">
-          <div class="icon">🔬</div>
+        <div class="card c-teal">
+          <div class="icon"><i class="bi bi-droplet-half" aria-hidden="true"></i></div>
           <h3>수질 분석 장비 영업</h3>
           <p>20년 동안 수질 분석 장비 영업을 담당해 왔습니다.</p>
         </div>
-        <div class="card">
-          <div class="icon">💻</div>
+        <div class="card c-violet">
+          <div class="icon"><i class="bi bi-laptop" aria-hidden="true"></i></div>
           <h3>바이브 코딩 학습</h3>
           <p>코딩을 처음부터 배우고 있습니다. AI와 대화하며 직접 만들어 보는 중입니다.</p>
         </div>
-        <div class="card">
-          <div class="icon">🧪</div>
+        <div class="card c-amber">
+          <div class="icon"><i class="bi bi-eyedropper" aria-hidden="true"></i></div>
           <h3>화학물질관리 플랫폼</h3>
           <p>앞으로 만들 서비스입니다. 화학물질을 관리하는 플랫폼을 준비하고 있습니다.</p>
         </div>
-        <div class="card">
-          <div class="icon">🚀</div>
+        <div class="card c-coral">
+          <div class="icon"><i class="bi bi-rocket-takeoff-fill" aria-hidden="true"></i></div>
           <h3>창업 준비</h3>
           <p>바이브 코딩을 배우는 이유는 창업입니다.</p>
         </div>
