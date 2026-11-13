@@ -1,0 +1,55 @@
+# ===========================================
+# 깃허브에 올리지 않을 파일 목록 (.gitignore)
+# ===========================================
+
+# --- 1. 비밀 정보 (가장 중요!) ---
+# 비밀번호, API 키 등이 들어가는 파일
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials.json
+
+# --- 2. 윈도우/맥이 자동으로 만드는 파일 ---
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+.DS_Store
+._*
+
+# --- 3. 편집기(VS Code 등) 개인 설정 ---
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*~
+
+# --- 4. Claude Code 개인 설정 ---
+.claude/settings.local.json
+
+# --- 5. 라이브러리 폴더 (나중에 다시 설치 가능) ---
+node_modules/
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# --- 6. 빌드 결과물 (자동 생성 파일) ---
+dist/
+build/
+.next/
+out/
+
+# --- 7. 로그·임시 파일 ---
+*.log
+npm-debug.log*
+*.tmp
+*.temp
+.cache/
+
+# --- 8. 로컬 데이터베이스 파일 ---
+*.sqlite
+*.sqlite3
+*.db
