@@ -53,3 +53,6 @@ npm-debug.log*
 *.sqlite
 *.sqlite3
 *.db
+
+# Local Netlify folder
+.netlify
