@@ -1,0 +1,13 @@
+{
+  "name": "firstweb",
+  "version": "1.0.0",
+  "private": true,
+  "description": "자기소개 페이지 + 카카오 로그인 (Netlify)",
+  "type": "module",
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

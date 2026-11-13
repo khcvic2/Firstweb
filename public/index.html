@@ -379,9 +379,73 @@
       .water svg, .bubble { animation: none; }
       .bubble { display: none; }
     }
+
+    /* ===== 로그인 영역 (오른쪽 위) ===== */
+    .auth-bar {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 20;
+      max-width: calc(100% - 32px);
+    }
+    .kakao-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      background: #FEE500;            /* 카카오 노란색 */
+      color: rgba(0, 0, 0, 0.85);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    .kakao-btn:hover { filter: brightness(0.96); }
+    .user-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 8px 6px 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      backdrop-filter: blur(6px);
+    }
+    .user-chip img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+    .user-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
+    .logout-btn {
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #0a5c66;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .auth-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      z-index: 50;
+      padding: 12px 20px;
+      border-radius: 10px;
+      background: var(--main);
+      color: #fff;
+      font-size: 14px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      max-width: calc(100% - 32px);
+    }
+    .auth-toast.is-error { background: #c2410c; }
   </style>
 </head>
 <body>
+
+  <!-- 0. 로그인 영역 (내용은 js/auth.js가 채움) -->
+  <div class="auth-bar" id="auth-bar"></div>
 
   <!-- 1. 맨 위 소개 -->
   <header class="hero">
@@ -512,5 +576,6 @@
     <div class="wrap">바이브 코딩으로 만든 첫 번째 웹페이지</div>
   </footer>
 
+  <script src="js/auth.js"></script>
 </body>
 </html>
