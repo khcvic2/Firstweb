@@ -1,0 +1,48 @@
+# ===========================================
+# GitHub Pages 자동 배포
+# main 브랜치에 푸시할 때마다 public 폴더만 GitHub Pages에 올립니다.
+# 주소: https://khcvic2.github.io/Firstweb/
+#
+# ※ GitHub Pages는 서버 코드(netlify/functions)를 실행하지 못합니다.
+#   로그인·뉴스·날씨·챗봇·영화 기능은 Netlify 사이트에서만 작동합니다.
+# ※ 비밀 키(.env)는 사용하지 않습니다.
+# ===========================================
+name: GitHub Pages 배포
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # Actions 탭에서 직접 실행 버튼으로도 배포 가능
+
+# Pages에 올리는 데 필요한 최소 권한만 허용
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 배포가 겹치면 진행 중인 것은 끝까지 마치고, 대기 중인 이전 배포는 건너뜀
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 코드 내려받기
+        uses: actions/checkout@v7
+
+      - name: Pages 설정 준비
+        uses: actions/configure-pages@v6
+
+      - name: public 폴더 묶기
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: public
+
+      - name: GitHub Pages에 배포
+        id: deployment
+        uses: actions/deploy-pages@v5
