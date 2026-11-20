@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시약 도우미 챗봇</title>
+  <meta name="description" content="시약·화학물질 관리에 대해 GPT에게 물어보는 챗봇 페이지">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/chat.css">
+</head>
+<body>
+  <div class="app">
+    <!-- 1. 맨 위 막대 -->
+    <header class="topbar">
+      <a class="back-link" href="/" aria-label="메인으로"><i class="bi bi-arrow-left"></i><span>메인</span></a>
+      <div class="title">
+        <i class="bi bi-robot" aria-hidden="true"></i>
+        <div>
+          <h1>시약 도우미</h1>
+          <p id="model-info">GPT 기반 챗봇</p>
+        </div>
+      </div>
+      <button class="icon-btn" id="clear-btn" type="button" title="대화 지우기" aria-label="대화 지우기"><i class="bi bi-trash3"></i></button>
+    </header>
+
+    <!-- 2. 대화 영역 -->
+    <main class="chat" id="chat" aria-live="polite">
+      <!-- 처음 화면 (대화가 없을 때) -->
+      <section class="welcome" id="welcome">
+        <div class="welcome-icon"><i class="bi bi-chat-dots"></i></div>
+        <h2>무엇이든 물어보세요</h2>
+        <p>시약 보관, MSDS 읽는 법, 화학물질 관련 법규 등을 쉽게 알려드려요.</p>
+        <div class="suggestions" id="suggestions">
+          <button type="button">염산과 수산화나트륨을 같이 보관해도 되나요?</button>
+          <button type="button">MSDS 16개 항목을 쉽게 설명해줘</button>
+          <button type="button">시약 재고 관리를 잘하는 방법은?</button>
+          <button type="button">유독물질과 사고대비물질의 차이는?</button>
+        </div>
+      </section>
+
+      <!-- 로그인이 필요할 때 -->
+      <section class="login-needed" id="login-needed" hidden>
+        <div class="welcome-icon"><i class="bi bi-lock"></i></div>
+        <h2>로그인이 필요해요</h2>
+        <p>챗봇은 카카오 로그인 후 사용할 수 있어요.</p>
+        <a class="kakao-btn" href="/auth/kakao/login?next=/chat.html">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 3C6.48 3 2 6.58 2 11c0 2.83 1.84 5.32 4.62 6.74l-.96 3.5c-.08.3.26.54.52.37l4.13-2.73c.55.07 1.11.12 1.69.12 5.52 0 10-3.58 10-8s-4.48-8-10-8z"/></svg>
+          카카오 로그인
+        </a>
+      </section>
+
+      <div class="messages" id="messages"></div>
+    </main>
+
+    <!-- 3. 입력창 -->
+    <form class="composer" id="composer">
+      <textarea id="input" rows="1" maxlength="2000" placeholder="메시지를 입력하세요 (Enter: 보내기, Shift+Enter: 줄바꿈)" aria-label="메시지 입력"></textarea>
+      <button type="submit" id="send-btn" aria-label="보내기"><i class="bi bi-send-fill"></i></button>
+    </form>
+    <p class="notice">AI 답변은 틀릴 수 있어요. 안전과 관련된 내용은 반드시 공식 MSDS와 전문가에게 확인하세요.</p>
+  </div>
+
+  <script src="js/chat.js"></script>
+</body>
+</html>

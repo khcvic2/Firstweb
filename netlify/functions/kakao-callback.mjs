@@ -4,8 +4,9 @@
 // 주소: /auth/kakao/callback  (카카오에 등록한 Redirect URI와 같은 경로)
 // ===========================================
 import {
-  SESSION_COOKIE, STATE_COOKIE, SESSION_DAYS,
+  SESSION_COOKIE, STATE_COOKIE, NEXT_COOKIE, SESSION_DAYS, safeNextPath,
   getCookie, makeCookie, getRedirectUri, redirect, signSession,
+  getEnv, findMissingEnv, configErrorRedirect,
 } from '../lib/session.mjs';
 
 const clearState = (req) => makeCookie(req, STATE_COOKIE, '', 0);
@@ -23,17 +24,19 @@ export default async (req) => {
   const savedState = getCookie(req, STATE_COOKIE);
   if (!code || !state || state !== savedState) return fail(req, 'invalid');
 
+  const missing = findMissingEnv();
+  if (missing.length) return configErrorRedirect(missing, 'kakao-callback');
+
   try {
     // (1) 인가 코드 → 액세스 토큰(카카오 API를 쓸 수 있는 임시 출입증) 교환
     const body = new URLSearchParams({
       grant_type: 'authorization_code',
-      client_id: process.env.KAKAO_REST_API_KEY,
+      client_id: getEnv('KAKAO_REST_API_KEY'),
       redirect_uri: getRedirectUri(req),
       code,
     });
-    if (process.env.KAKAO_CLIENT_SECRET) {
-      body.set('client_secret', process.env.KAKAO_CLIENT_SECRET);
-    }
+    const clientSecret = getEnv('KAKAO_CLIENT_SECRET');
+    if (clientSecret) body.set('client_secret', clientSecret);
 
     const tokenRes = await fetch('https://kauth.kakao.com/oauth/token', {
       method: 'POST',
@@ -67,8 +70,10 @@ export default async (req) => {
     // (3) 로그인 상태를 서명된 쿠키로 저장하고 첫 화면으로 이동
     const maxAge = SESSION_DAYS * 24 * 60 * 60;
     const session = signSession({ ...user, exp: Date.now() + maxAge * 1000 });
-    return redirect('/?login=success', [
+    const next = safeNextPath(getCookie(req, NEXT_COOKIE)); // 로그인 전에 있던 페이지로 돌아감
+    return redirect(`${next}?login=success`, [
       makeCookie(req, SESSION_COOKIE, session, maxAge),
+      makeCookie(req, NEXT_COOKIE, '', 0),
       clearState(req),
     ]);
   } catch (err) {

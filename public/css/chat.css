@@ -1,0 +1,168 @@
+/* ===========================================
+   챗봇 페이지 디자인 (메인 페이지와 같은 색상 사용)
+   =========================================== */
+:root {
+  --bg: #f6fafb;
+  --card: #ffffff;
+  --text: #14232b;
+  --muted: #5b6f79;
+  --line: #dbe7ec;
+  --main: #0e7c86;
+  --main-dark: #0a5c66;
+  --main-soft: #e1f3f4;
+  --error: #c2410c;
+  --error-soft: #fff1e8;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1a20;
+    --card: #13252d;
+    --text: #e6f0f3;
+    --muted: #9db2bb;
+    --line: #22404b;
+    --main: #3cc4cf;
+    --main-dark: #0e7c86;
+    --main-soft: #173842;
+    --error: #fb923c;
+    --error-soft: #3a2418;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Inter', 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 화면 전체를 위(막대)·가운데(대화)·아래(입력)로 나눔 */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ===== 맨 위 막대 ===== */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #0a5c66 0%, #0e7c86 60%, #2aa6b0 100%);
+  color: #fff;
+}
+.back-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px; text-decoration: none;
+}
+.back-link:hover { color: #fff; }
+.title { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.title > i { font-size: 28px; }
+.title h1 { font-size: 18px; font-weight: 900; line-height: 1.2; }
+.title p { font-size: 12px; opacity: 0.85; }
+.icon-btn {
+  width: 38px; height: 38px;
+  border: 0; border-radius: 10px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff; font-size: 16px; cursor: pointer;
+}
+.icon-btn:hover { background: rgba(255, 255, 255, 0.28); }
+
+/* ===== 대화 영역 ===== */
+.chat { flex: 1; overflow-y: auto; padding: 20px 16px; }
+
+.welcome, .login-needed { text-align: center; padding: 32px 8px; }
+.welcome-icon {
+  width: 64px; height: 64px; margin: 0 auto 14px;
+  display: grid; place-items: center;
+  border-radius: 20px; background: var(--main-soft); color: var(--main);
+  font-size: 30px;
+}
+.welcome h2, .login-needed h2 { font-size: 22px; font-weight: 900; }
+.welcome p, .login-needed p { color: var(--muted); margin: 6px 0 20px; }
+.suggestions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 8px; text-align: left; }
+.suggestions button {
+  padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: 12px;
+  background: var(--card); color: var(--text);
+  font: inherit; font-size: 14px; cursor: pointer;
+}
+.suggestions button:hover { border-color: var(--main); color: var(--main); }
+
+.kakao-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 20px; border-radius: 8px;
+  background: #FEE500; color: rgba(0, 0, 0, 0.85);
+  font-weight: 700; text-decoration: none;
+}
+
+/* ===== 말풍선 ===== */
+.messages { display: flex; flex-direction: column; gap: 14px; }
+.msg { display: flex; gap: 10px; align-items: flex-end; max-width: 100%; }
+.msg.user { flex-direction: row-reverse; }
+.avatar {
+  flex: none; width: 32px; height: 32px;
+  display: grid; place-items: center;
+  border-radius: 50%; background: var(--main-soft); color: var(--main);
+  font-size: 16px;
+}
+.msg.user .avatar { display: none; }
+.bubble {
+  max-width: min(78%, 620px);
+  padding: 10px 14px;
+  border-radius: 16px;
+  white-space: pre-wrap; /* 줄바꿈 그대로 표시 */
+  font-size: 15px;
+}
+.msg.assistant .bubble { background: var(--card); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+.msg.user .bubble { background: var(--main-dark); color: #fff; border-bottom-right-radius: 4px; }
+.msg.error .bubble { background: var(--error-soft); color: var(--error); border: 1px solid var(--error); }
+
+/* 답변 기다리는 동안 점 3개 */
+.typing { display: inline-flex; gap: 4px; padding: 4px 0; }
+.typing span { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: blink 1.2s infinite; }
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%, 80%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .typing span { animation: none; opacity: 0.6; } }
+
+/* ===== 입력창 ===== */
+.composer {
+  display: flex; align-items: flex-end; gap: 8px;
+  margin: 0 16px;
+  padding: 8px 8px 8px 14px;
+  border: 1px solid var(--line); border-radius: 16px;
+  background: var(--card);
+}
+.composer:focus-within { border-color: var(--main); }
+.composer textarea {
+  flex: 1; min-width: 0;
+  max-height: 160px;
+  border: 0; outline: 0; resize: none;
+  background: transparent; color: var(--text);
+  font: inherit; font-size: 15px; line-height: 1.5;
+  padding: 6px 0;
+}
+.composer button {
+  flex: none; width: 40px; height: 40px;
+  border: 0; border-radius: 12px;
+  background: var(--main); color: #fff;
+  font-size: 16px; cursor: pointer;
+}
+.composer button:disabled { opacity: 0.45; cursor: not-allowed; }
+.notice { padding: 8px 16px 14px; text-align: center; font-size: 12px; color: var(--muted); }
+
+@media (max-width: 480px) {
+  .back-link span { display: none; }
+  .bubble { max-width: 86%; }
+}

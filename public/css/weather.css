@@ -1,0 +1,205 @@
+/* ===========================================
+   날씨 페이지 디자인 (메인 페이지와 같은 색상 사용)
+   =========================================== */
+:root {
+  --bg: #f6fafb;
+  --card: #ffffff;
+  --text: #14232b;
+  --muted: #5b6f79;
+  --line: #dbe7ec;
+  --main: #0e7c86;
+  --main-soft: #e1f3f4;
+  --accent: #f2a541;
+  --rain: #2f6fd1;
+  --error: #c2410c;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1a20;
+    --card: #13252d;
+    --text: #e6f0f3;
+    --muted: #9db2bb;
+    --line: #22404b;
+    --main: #3cc4cf;
+    --main-soft: #173842;
+    --accent: #f5b65f;
+    --rain: #7fb0ff;
+    --error: #fb923c;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+
+/* ===== 맨 위 제목 영역 ===== */
+.wx-hero {
+  padding: 40px 0 64px;
+  background: linear-gradient(135deg, #0a5c66 0%, #0e7c86 50%, #2aa6b0 100%);
+  color: #fff;
+}
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  text-decoration: none;
+}
+.back-link:hover { color: #fff; }
+.wx-hero h1 { font-size: clamp(28px, 5vw, 40px); font-weight: 900; display: flex; align-items: center; gap: 12px; }
+.wx-hero p { margin-top: 8px; opacity: 0.9; }
+
+/* ===== 전체 배치: 왼쪽 지도 / 오른쪽 결과 ===== */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  margin-top: -36px;
+  padding-bottom: 56px;
+}
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+.results { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.map-panel { position: sticky; top: 16px; }
+
+/* ===== 검색 ===== */
+.search {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 4px 4px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+}
+.search:focus-within { border-color: var(--main); }
+.search input {
+  flex: 1; min-width: 0;
+  border: 0; outline: 0; background: transparent;
+  color: var(--text); font: inherit; font-size: 15px;
+}
+.search button {
+  padding: 8px 16px; border: 0; border-radius: 999px;
+  background: var(--main); color: #fff;
+  font: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+
+/* ===== 주요 도시 버튼 ===== */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+.chip {
+  padding: 5px 12px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: transparent; color: var(--muted);
+  font: inherit; font-size: 13px; cursor: pointer;
+}
+.chip:hover, .chip.is-active { border-color: var(--main); color: var(--main); background: var(--main-soft); }
+
+/* ===== 지도 ===== */
+.map { height: 460px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); z-index: 0; background: var(--main-soft); }
+.map.map-error {
+  display: grid; place-items: center;
+  padding: 24px; text-align: center;
+  color: var(--muted); font-size: 14px;
+}
+/* 지도 위 지역 이름표 */
+.map-label {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #0a5c66;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+.hint { margin-top: 10px; font-size: 13px; color: var(--muted); }
+
+/* ===== 상태 안내 ===== */
+.status { color: var(--muted); font-size: 14px; min-height: 1.6em; }
+.status.is-error {
+  color: var(--error); font-weight: 500;
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px;
+}
+
+/* ===== 현재 날씨 ===== */
+.current { background: linear-gradient(160deg, var(--main-soft), var(--card) 70%); }
+.current-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.place { font-size: 22px; font-weight: 900; }
+.updated { font-size: 13px; color: var(--muted); }
+.current-icon { width: 84px; height: 84px; margin: -12px -8px -8px 0; }
+.current-main { display: flex; align-items: center; gap: 18px; margin: 4px 0 14px; }
+.temp { font-size: 64px; font-weight: 900; line-height: 1; letter-spacing: -2px; }
+.desc { font-size: 18px; font-weight: 700; }
+.range { font-size: 14px; color: var(--muted); }
+.details {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+.details div {
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.details dt { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+.details dd { font-size: 16px; font-weight: 700; }
+
+/* ===== 시간별 ===== */
+.panel-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.hourly { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(72px, 1fr); gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.hour {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 10px 6px; border-radius: 10px; background: var(--main-soft);
+  font-size: 13px;
+}
+.hour img { width: 40px; height: 40px; }
+.hour strong { font-size: 16px; }
+.pop { color: var(--rain); font-size: 12px; font-weight: 500; }
+
+/* ===== 5일 예보 ===== */
+.daily { list-style: none; display: flex; flex-direction: column; }
+.day {
+  display: grid;
+  grid-template-columns: 76px 44px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px;
+  border-top: 1px solid var(--line);
+}
+.day:first-child { border-top: 0; }
+.day-name { font-weight: 700; }
+.day-name small { display: block; font-weight: 400; font-size: 12px; color: var(--muted); }
+.day img { width: 44px; height: 44px; }
+.day-desc { font-size: 14px; color: var(--muted); min-width: 0; }
+.day-temp { font-size: 15px; white-space: nowrap; }
+.day-temp .min { color: var(--muted); }
+.day-temp .max { font-weight: 700; }
+
+footer { padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; text-align: center; }
+footer a { color: var(--main); }
+
+/* ===== 좁은 화면(태블릿·휴대폰) ===== */
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }
+  .map-panel { position: static; }
+  .map { height: 320px; }
+}
+@media (max-width: 480px) {
+  .temp { font-size: 52px; }
+  .day { grid-template-columns: 64px 40px 1fr auto; gap: 8px; }
+  .day-desc { font-size: 13px; }
+}

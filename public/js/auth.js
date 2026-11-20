@@ -13,6 +13,7 @@
     cancelled: '로그인이 취소되었습니다.',
     invalid: '잘못된 로그인 요청입니다. 다시 시도해 주세요.',
     error: '로그인 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.',
+    config: '서버 설정이 끝나지 않아 로그인할 수 없습니다.',
   };
 
   // 카카오 말풍선 모양 아이콘
@@ -58,11 +59,15 @@
     const toast = document.createElement('div');
     toast.className = 'auth-toast' + (['success', 'logout'].includes(key) ? '' : ' is-error');
     toast.setAttribute('role', 'status');
-    toast.textContent = MESSAGES[key];
+    let text = MESSAGES[key];
+    const missing = (params.get('missing') || '').match(/[A-Z_]+/g); // 변수 이름(대문자·밑줄)만 표시
+    if (key === 'config' && missing) text += ' 확인할 환경 변수: ' + missing.join(', ');
+    toast.textContent = text;
     document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3500);
+    setTimeout(() => toast.remove(), key === 'config' ? 10000 : 3500);
 
     params.delete('login');
+    params.delete('missing');
     const rest = params.toString();
     history.replaceState(null, '', location.pathname + (rest ? '?' + rest : '') + location.hash);
   }
