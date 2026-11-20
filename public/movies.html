@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>인기 영화 100</title>
+  <meta name="description" content="지금 인기 있는 영화와 역대 평점 높은 영화 100편을 소개하는 페이지">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/movies.css">
+</head>
+<body>
+
+  <!-- 1. 맨 위 제목 영역 -->
+  <header class="mv-hero">
+    <div class="wrap">
+      <a class="back-link" href="/"><i class="bi bi-arrow-left"></i> 메인으로</a>
+      <h1><i class="bi bi-film"></i> 인기 영화 100</h1>
+      <p>지금 많이 찾는 영화와 역대 평점이 높은 영화를 100편씩 모았어요.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- 2. 목록 탭 + 검색 + 장르 -->
+    <div class="toolbar">
+      <div class="tabs" role="tablist" aria-label="영화 목록 종류">
+        <button class="tab" role="tab" data-list="popular"><i class="bi bi-fire"></i> 지금 인기</button>
+        <button class="tab" role="tab" data-list="top_rated"><i class="bi bi-trophy"></i> 역대 평점 TOP</button>
+      </div>
+      <label class="search">
+        <i class="bi bi-search" aria-hidden="true"></i>
+        <input id="search-input" type="search" placeholder="제목으로 찾기" aria-label="영화 제목 검색">
+      </label>
+    </div>
+    <div class="genres" id="genres" aria-label="장르 선택"></div>
+
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+
+    <!-- 3. 영화 카드 목록 (js/movies.js가 채움) -->
+    <ol class="grid" id="grid"></ol>
+  </main>
+
+  <!-- 4. 영화 자세히 보기 창 -->
+  <dialog class="modal" id="modal" aria-labelledby="modal-title">
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-body">
+      <button class="modal-close" id="modal-close" type="button" aria-label="닫기"><i class="bi bi-x-lg"></i></button>
+      <div class="modal-main">
+        <img class="modal-poster" id="modal-poster" alt="">
+        <div>
+          <p class="modal-rank" id="modal-rank"></p>
+          <h2 id="modal-title"></h2>
+          <p class="modal-original" id="modal-original"></p>
+          <p class="modal-meta" id="modal-meta"></p>
+          <div class="modal-genres" id="modal-genres"></div>
+        </div>
+      </div>
+      <p class="modal-overview" id="modal-overview"></p>
+      <a class="modal-link" id="modal-link" target="_blank" rel="noopener">TMDB에서 더 보기 <i class="bi bi-box-arrow-up-right"></i></a>
+    </div>
+  </dialog>
+
+  <footer>
+    <div class="wrap">
+      영화 정보 제공: <a href="https://www.themoviedb.org" target="_blank" rel="noopener">TMDB</a><br>
+      <small>This product uses the TMDB API but is not endorsed or certified by TMDB.</small>
+    </div>
+  </footer>
+
+  <script src="js/movies.js"></script>
+</body>
+</html>

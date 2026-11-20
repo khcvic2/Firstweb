@@ -471,6 +471,10 @@
       max-width: calc(100% - 32px);
     }
     .auth-toast.is-error { background: #c2410c; }
+    /* 좁은 화면: 오른쪽 위 버튼이 두 줄이 되어도 제목을 가리지 않도록 위 여백 확보 */
+    @media (max-width: 520px) {
+      .hero { padding-top: 120px; }
+    }
   </style>
 </head>
 <body>
@@ -480,6 +484,7 @@
     <a class="hero-link" href="news.html" aria-label="오늘의 뉴스 보기"><i class="bi bi-newspaper"></i> <span class="long">오늘의 뉴스 보기</span><span class="short">뉴스</span></a>
     <a class="hero-link" href="weather.html" aria-label="날씨 지도 보기"><i class="bi bi-cloud-sun"></i> <span class="long">날씨 지도</span><span class="short">날씨</span></a>
     <a class="hero-link" href="chat.html" aria-label="시약 도우미 챗봇"><i class="bi bi-robot"></i> <span class="long">AI 챗봇</span><span class="short">챗봇</span></a>
+    <a class="hero-link" href="movies.html" aria-label="인기 영화 100"><i class="bi bi-film"></i> <span class="long">인기 영화</span><span class="short">영화</span></a>
     <div class="auth-bar" id="auth-bar"></div>
   </div>
 

@@ -1,0 +1,210 @@
+/* ===========================================
+   인기 영화 페이지 디자인 (메인 페이지와 같은 색상 사용)
+   =========================================== */
+:root {
+  --bg: #f6fafb;
+  --card: #ffffff;
+  --text: #14232b;
+  --muted: #5b6f79;
+  --line: #dbe7ec;
+  --main: #0e7c86;
+  --main-soft: #e1f3f4;
+  --star: #e8a317;
+  --error: #c2410c;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1a20;
+    --card: #13252d;
+    --text: #e6f0f3;
+    --muted: #9db2bb;
+    --line: #22404b;
+    --main: #3cc4cf;
+    --main-soft: #173842;
+    --star: #f5b65f;
+    --error: #fb923c;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+/* ===== 맨 위 제목 영역 ===== */
+.mv-hero {
+  padding: 40px 0 56px;
+  background: linear-gradient(135deg, #0a5c66 0%, #0e7c86 50%, #2aa6b0 100%);
+  color: #fff;
+}
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px; text-decoration: none;
+}
+.back-link:hover { color: #fff; }
+.mv-hero h1 { font-size: clamp(28px, 5vw, 40px); font-weight: 900; display: flex; align-items: center; gap: 12px; }
+.mv-hero p { margin-top: 8px; opacity: 0.9; }
+
+/* ===== 탭 + 검색 ===== */
+.toolbar {
+  position: relative;
+  display: flex; flex-wrap: wrap; gap: 12px;
+  align-items: center; justify-content: space-between;
+  margin-top: -28px;
+  padding: 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+.tabs { display: flex; gap: 6px; }
+.tab {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: transparent; color: var(--muted);
+  font: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.tab:hover { border-color: var(--main); color: var(--main); }
+.tab.is-active { background: var(--main); border-color: var(--main); color: #fff; }
+.search {
+  display: flex; align-items: center; gap: 8px;
+  flex: 1 1 220px; max-width: 320px;
+  padding: 8px 14px;
+  border: 1px solid var(--line); border-radius: 999px;
+  color: var(--muted);
+}
+.search:focus-within { border-color: var(--main); }
+.search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--text); font: inherit; font-size: 14px; }
+
+/* ===== 장르 버튼 ===== */
+.genres { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 4px; }
+.genre {
+  padding: 5px 12px;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: transparent; color: var(--muted);
+  font: inherit; font-size: 13px; cursor: pointer;
+}
+.genre:hover, .genre.is-active { border-color: var(--main); color: var(--main); background: var(--main-soft); }
+
+.status { margin: 12px 2px; color: var(--muted); font-size: 14px; min-height: 1.6em; }
+.status.is-error { color: var(--error); font-weight: 500; }
+
+/* ===== 영화 카드 ===== */
+.grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(46%, 170px), 1fr));
+  gap: 18px;
+  padding-bottom: 56px;
+}
+.movie {
+  position: relative;
+  display: flex; flex-direction: column;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: inherit; font: inherit; text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.movie:hover, .movie:focus-visible { transform: translateY(-4px); box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12); }
+.poster {
+  aspect-ratio: 2 / 3;
+  width: 100%;
+  background: var(--main-soft);
+  display: grid; place-items: center;
+  color: var(--main); font-size: 40px;
+}
+.poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rank {
+  position: absolute; top: 8px; left: 8px;
+  min-width: 34px; padding: 2px 8px;
+  border-radius: 8px;
+  background: rgba(10, 30, 36, 0.82); color: #fff;
+  font-size: 14px; font-weight: 900; text-align: center;
+}
+.rank.top3 { background: var(--star); color: #1b1300; }
+.movie-info { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 4px; }
+.movie-title {
+  font-size: 15px; font-weight: 700; line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.movie-meta { display: flex; justify-content: space-between; gap: 6px; font-size: 13px; color: var(--muted); }
+.star { color: var(--star); font-weight: 700; }
+
+/* 불러오는 동안 회색 카드 */
+.movie.is-skeleton { pointer-events: none; }
+.movie.is-skeleton .poster, .movie.is-skeleton .line {
+  background: linear-gradient(90deg, var(--line) 0%, var(--main-soft) 50%, var(--line) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite linear;
+}
+.movie.is-skeleton .line { height: 12px; border-radius: 6px; }
+.movie.is-skeleton .line.short { width: 50%; }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+/* ===== 자세히 보기 창 ===== */
+.modal {
+  width: min(680px, calc(100% - 32px));
+  max-height: calc(100dvh - 40px);
+  margin: auto;
+  padding: 0;
+  border: 0; border-radius: 16px;
+  background: var(--card); color: var(--text);
+  overflow: auto;
+}
+.modal::backdrop { background: rgba(0, 0, 0, 0.6); }
+.modal-backdrop {
+  height: 200px;
+  background: var(--main-soft) center / cover no-repeat;
+}
+.modal-body { position: relative; padding: 0 22px 22px; }
+.modal-close {
+  position: absolute; top: -186px; right: 12px;
+  width: 38px; height: 38px;
+  border: 0; border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55); color: #fff;
+  font-size: 16px; cursor: pointer;
+}
+.modal-main { display: flex; gap: 18px; align-items: flex-end; margin-top: -70px; }
+.modal-poster {
+  width: 120px; aspect-ratio: 2 / 3; flex: none;
+  object-fit: cover;
+  border-radius: 10px; border: 3px solid var(--card);
+  background: var(--main-soft);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+.modal-rank { font-size: 13px; font-weight: 700; color: var(--main); }
+.modal h2 { font-size: 22px; font-weight: 900; line-height: 1.3; }
+.modal-original { font-size: 14px; color: var(--muted); }
+.modal-meta { font-size: 14px; margin-top: 4px; }
+.modal-genres { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.modal-genres span { padding: 2px 10px; border-radius: 999px; background: var(--main-soft); color: var(--main); font-size: 12px; }
+.modal-overview { margin: 18px 0; font-size: 15px; white-space: pre-line; }
+.modal-link { color: var(--main); font-weight: 700; font-size: 14px; text-decoration: none; }
+
+footer { padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; text-align: center; }
+footer a { color: var(--main); }
+
+@media (prefers-reduced-motion: reduce) {
+  .movie, .movie.is-skeleton .poster, .movie.is-skeleton .line { transition: none; animation: none; }
+}
+@media (max-width: 520px) {
+  .grid { gap: 12px; }
+  .modal-main { flex-direction: column; align-items: flex-start; margin-top: -60px; }
+  .modal-poster { width: 96px; }
+}
